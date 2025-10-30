@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Tin học 12</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8fafc; padding: 20px; }
+    .quiz-box { background: #fff; padding: 20px; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #2563eb; }
+    button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h1>Quiz Tin học 12</h1>
+    <div id="quiz"></div>
+    <button onclick="checkAnswers()">Nộp bài</button>
+    <p id="result"></p>
+
+    <script>
+      const questions = [
+        { q: "Câu 1: Máy tính xử lý thông tin theo đơn vị nào?", a: ["Bit", "Byte", "MB", "KB"], correct: 1 },
+        { q: "Câu 2: Internet là gì?", a: ["Một phần mềm", "Một mạng toàn cầu", "Một hệ điều hành", "Một ngôn ngữ lập trình"], correct: 1 }
+      ];
+      const quizDiv = document.getElementById("quiz");
+      questions.forEach((item, i) => {
+        const qDiv = document.createElement("div");
+        qDiv.innerHTML = `<p>${item.q}</p>` + item.a.map((opt, j) =>
+          `<label><input type='radio' name='q${i}' value='${j}'> ${opt}</label><br>`).join("");
+        quizDiv.appendChild(qDiv);
+      });
+      function checkAnswers() {
+        let score = 0;
+        questions.forEach((item, i) => {
+          const selected = document.querySelector(`input[name="q${i}"]:checked`);
+          if (selected && Number(selected.value) === item.correct) score++;
+        });
+        document.getElementById("result").innerText = `Bạn đúng ${score}/${questions.length} câu.`;
+      }
+    </script>
+  </div>
+</body>
+</html>
