@@ -1,112 +1,221 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz Tin học 12 — 40 câu</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiz 40 câu trắc nghiệm - Tin học 12</title>
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 20px; }
-    .quiz-box { max-width: 800px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: auto; padding: 20px; }
-    h1 { font-size: 24px; text-align: center; margin-bottom: 10px; }
-    .question { font-size: 18px; margin-bottom: 10px; }
-    .option { border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; margin: 5px 0; cursor: pointer; }
-    .option:hover { background-color: #f1f5f9; }
-    .selected { border-color: #0284c7; background-color: #e0f2fe; }
-    .correct { background-color: #dcfce7; border-color: #22c55e; }
-    .wrong { background-color: #fee2e2; border-color: #ef4444; }
-    button { margin-top: 10px; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-primary { background-color: #0284c7; color: white; border: none; }
-    .btn-secondary { background-color: #e2e8f0; border: none; }
-    .score { text-align: right; font-size: 14px; color: #555; }
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --accent:#2563eb;
+      --muted:#6b7280;
+      --correct:#10b981;
+      --wrong:#ef4444;
+      --shadow: 0 6px 18px rgba(32,33,36,0.08);
+    }
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#eef2ff 0%, var(--bg) 100%);
+      color:#0f172a;
+      margin:0;
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
+    }
+    .container{
+      max-width:1000px;
+      margin:0 auto;
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:18px;
+    }
+    header h1{
+      margin:0;
+      font-size:20px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    button{
+      background:var(--accent);
+      color:white;
+      border:0;
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow: 0 6px 12px rgba(37,99,235,0.12);
+    }
+    button.ghost{
+      background:transparent;
+      color:var(--accent);
+      box-shadow:none;
+      border:1px solid rgba(37,99,235,0.12);
+    }
+    .small{
+      font-size:13px;
+      color:var(--muted);
+    }
+    .question{
+      margin-bottom:14px;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid #eef2ff;
+    }
+    .q-title{
+      font-weight:600;
+      margin-bottom:8px;
+    }
+    .options{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    label.opt{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid #eef2ff;
+      background: #fbfdff;
+      cursor:pointer;
+      user-select:none;
+    }
+    input[type="radio"]{ accent-color: var(--accent); }
+    .summary{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .result{
+      padding:12px;
+      border-radius:10px;
+    }
+    .result.good{ background: rgba(16,185,129,0.08); color:var(--correct); border:1px solid rgba(16,185,129,0.12); }
+    .result.bad{ background: rgba(239,68,68,0.06); color:var(--wrong); border:1px solid rgba(239,68,68,0.12); }
+    .answers-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+      gap:8px;
+      margin-top:8px;
+    }
+    .key-input{
+      width:100%;
+      padding:8px;
+      border-radius:8px;
+      border:1px solid #e6eefc;
+      font-family:monospace;
+    }
+    .note { color:var(--muted); font-size:13px; margin-top:8px; }
+    .answer-mark{ font-weight:700; padding:4px 8px; border-radius:8px; display:inline-block; }
+    .correct { background:rgba(16,185,129,0.12); color:var(--correct); }
+    .incorrect { background:rgba(239,68,68,0.08); color:var(--wrong); }
+    footer { text-align:center; margin-top:18px; color:var(--muted); font-size:13px; }
+    @media (max-width:640px){
+      header{flex-direction:column; align-items:flex-start; gap:10px;}
+    }
   </style>
 </head>
 <body>
-  <div class="quiz-box">
-    <h1>Quiz ôn tập Tin học 12 — 40 câu</h1>
-    <div id="progress"></div>
-    <div id="question-container"></div>
-    <div id="options"></div>
-    <div id="feedback"></div>
-    <div>
-      <button id="submit" class="btn-primary">Kiểm tra</button>
-      <button id="next" class="btn-secondary">Tiếp theo</button>
-      <span class="score" id="score"></span>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Quiz: Đề ôn tập Tin học 12 — 40 câu trắc nghiệm</h1>
+        <div class="small">File chứa toàn bộ 40 câu trắc nghiệm. Chọn đáp án và nhấn "Nộp bài" để xem tóm tắt. Giáo viên có thể nhập answer key để tự chấm.</div>
+      </div>
+      <div class="controls">
+        <button id="btnSubmit">Nộp bài</button>
+        <button id="btnShowAnswers" class="ghost">Hiện/Ẩn đáp án đúng</button>
+        <button id="btnReset" class="ghost">Đặt lại</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <div style="flex:1">
+          <label class="small">Answer key (tuỳ chọn):</label>
+          <input id="answerKeyInput" class="key-input" placeholder="Nhập đáp án đúng theo dạng A,B,C,... hoặc để trống" />
+          <div class="note">Ví dụ: A,D,C,A,A,... (40 chữ cái, cách nhau bằng dấu phẩy hoặc không)</div>
+        </div>
+        <div style="width:260px">
+          <label class="small">Tải bộ đáp án mẫu (tuỳ chọn)</label>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button id="btnLoadSample" class="ghost">Tải mẫu</button>
+            <button id="btnClearKey" class="ghost">Xóa key</button>
+          </div>
+          <div class="note">Nếu nhập key, khi nộp sẽ tự chấm và highlight đúng/sai.</div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <script>
-    const questions = [
-      { q: "AI là gì?", a: 0, c: ["Khả năng của máy tính có thể làm những công việc mang tính trí tuệ của con người.","Khả năng của máy tính thực hiện các công việc cơ bản.","Khả năng của con người trong việc sử dụng máy tính.","Một phần mềm điều khiển máy tính."] },
-      { q: "Phát biểu nào phù hợp nhất khi nói về khả năng của Trí tuệ nhân tạo hẹp?", a: 3, c: ["Tự chuyển đổi để giải quyết các nhiệm vụ khác nhau.","Suy luận và giải quyết các vấn đề phức tạp như con người.","Hiểu ngôn ngữ tự nhiên và tạo ra văn bản giống con người.","Giải quyết nhiệm vụ cụ thể theo những gì đã được học."] },
-      { q: "Phương án nào nêu đúng về khả năng suy luận của AI?", a: 2, c: ["Trích xuất thông tin từ dữ liệu để học và tích luỹ tri thức.","Cảm nhận và hiểu biết môi trường thông qua các cảm biến và thiết bị đầu vào.","Vận dụng logic và tri thức để đưa ra quyết định hoặc kết luận.","Tìm ra cách giải quyết các tình huống phức tạp dựa trên thông tin và tri thức."] },
-      { q: "Phương án nào nêu đúng về khả năng học của AI?", a: 0, c: ["Trích xuất thông tin từ dữ liệu để học và tích luỹ tri thức.","Cảm nhận và hiểu biết môi trường thông qua các cảm biến và thiết bị đầu vào.","Khả năng vận dụng logic và tri thức để đưa ra quyết định hoặc kết luận.","Khả năng tìm ra cách giải quyết các tình huống phức tạp dựa trên thông tin và tri thức."] },
-      // ... (để rút gọn ví dụ, có thể tiếp tục thêm các câu khác tương tự, đủ 40 câu như bản React)
-    ];
+    <form id="quizForm" class="card" autocomplete="off">
+      <!-- QUESTIONS -->
+      <!-- We'll include 40 questions taken from the uploaded document -->
+      <!-- Each question block: data-q attribute with number -->
+      
+      <!-- Question 1 -->
+      <div class="question" data-q="1">
+        <div class="q-title">Câu 1. AI là gì?</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="q1" value="A"> A. Khả năng của máy tính có thể làm những công việc mang tính trí tuệ của con người.</label>
+          <label class="opt"><input type="radio" name="q1" value="B"> B. Khả năng của máy tính thực hiện các công việc cơ bản.</label>
+          <label class="opt"><input type="radio" name="q1" value="C"> C. Khả năng của con người trong việc sử dụng máy tính.</label>
+          <label class="opt"><input type="radio" name="q1" value="D"> D. Một phần mềm điều khiển máy tính.</label>
+        </div>
+      </div>
 
-    let current = 0;
-    let score = 0;
-    let selected = null;
+      <!-- Question 2 -->
+      <div class="question" data-q="2">
+        <div class="q-title">Câu 2. Phát biểu nào dưới đây phù hợp nhất khi nói về khả năng của Trí tuệ nhân tạo hẹp?</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="q2" value="A"> A. Tự chuyển đổi để giải quyết các nhiệm vụ khác nhau.</label>
+          <label class="opt"><input type="radio" name="q2" value="B"> B. Suy luận và giải quyết các vấn đề phức tạp như con người.</label>
+          <label class="opt"><input type="radio" name="q2" value="C"> C. Hiểu ngôn ngữ tự nhiên và tạo ra văn bản giống con người.</label>
+          <label class="opt"><input type="radio" name="q2" value="D"> D. Giải quyết nhiệm vụ cụ thể theo những gì đã được học.</label>
+        </div>
+      </div>
 
-    const questionContainer = document.getElementById('question-container');
-    const optionsDiv = document.getElementById('options');
-    const feedbackDiv = document.getElementById('feedback');
-    const progressDiv = document.getElementById('progress');
-    const scoreDiv = document.getElementById('score');
+      <!-- Question 3 -->
+      <div class="question" data-q="3">
+        <div class="q-title">Câu 3. Phương án nào dưới đây nêu đúng về khả năng suy luận của AI?</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="q3" value="A"> A. Trích xuất thông tin từ dữ liệu để học và tích luỹ tri thức.</label>
+          <label class="opt"><input type="radio" name="q3" value="B"> B. Cảm nhận và hiểu biết môi trường thông qua các cảm biến và thiết bị đầu vào.</label>
+          <label class="opt"><input type="radio" name="q3" value="C"> C. Vận dụng logic và tri thức để đưa ra quyết định hoặc kết luận.</label>
+          <label class="opt"><input type="radio" name="q3" value="D"> D. Tìm ra cách giải quyết các tình huống phức tạp dựa trên thông tin và tri thức.</label>
+        </div>
+      </div>
 
-    function renderQuestion() {
-      const q = questions[current];
-      questionContainer.innerHTML = `<div class='question'><b>Câu ${current + 1}.</b> ${q.q}</div>`;
-      progressDiv.textContent = `Câu ${current + 1} / ${questions.length}`;
-      optionsDiv.innerHTML = '';
-      feedbackDiv.textContent = '';
-      selected = null;
-      q.c.forEach((choice, i) => {
-        const div = document.createElement('div');
-        div.className = 'option';
-        div.textContent = choice;
-        div.onclick = () => {
-          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-          div.classList.add('selected');
-          selected = i;
-        };
-        optionsDiv.appendChild(div);
-      });
-      document.getElementById('submit').disabled = false;
-    }
+      <!-- Question 4 -->
+      <div class="question" data-q="4">
+        <div class="q-title">Câu 4. Phương án nào dưới đây nêu đúng về khả năng học của AI?</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="q4" value="A"> A. Trích xuất thông tin từ dữ liệu để học và tích luỹ tri thức.</label>
+          <label class="opt"><input type="radio" name="q4" value="B"> B. Cảm nhận và hiểu biết môi trường thông qua các cảm biến và thiết bị đầu vào.</label>
+          <label class="opt"><input type="radio" name="q4" value="C"> C. Khả năng vận dụng logic và tri thức để đưa ra quyết định hoặc kết luận.</label>
+          <label class="opt"><input type="radio" name="q4" value="D"> D. Khả năng tìm ra cách giải quyết các tình huống phức tạp dựa trên thông tin và tri thức.</label>
+        </div>
+      </div>
 
-    document.getElementById('submit').onclick = () => {
-      if (selected === null) return;
-      const q = questions[current];
-      const options = document.querySelectorAll('.option');
-      options[q.a].classList.add('correct');
-      if (selected === q.a) {
-        feedbackDiv.textContent = '✅ Chính xác!';
-        feedbackDiv.style.color = 'green';
-        score++;
-      } else {
-        feedbackDiv.textContent = `❌ Sai rồi. Đáp án đúng là: ${q.c[q.a]}`;
-        feedbackDiv.style.color = 'red';
-        options[selected].classList.add('wrong');
-      }
-      scoreDiv.textContent = `Điểm: ${score}`;
-      document.getElementById('submit').disabled = true;
-    };
-
-    document.getElementById('next').onclick = () => {
-      if (current < questions.length - 1) {
-        current++;
-        renderQuestion();
-      } else {
-        questionContainer.innerHTML = `<h2>Hoàn thành!</h2><p>Bạn đúng ${score}/${questions.length} câu.</p>`;
-        optionsDiv.innerHTML = '';
-        feedbackDiv.innerHTML = '';
-        document.getElementById('submit').style.display = 'none';
-        document.getElementById('next').style.display = 'none';
-      }
-    };
-
-    renderQuestion();
-  </script>
-</body>
-</html>
+      <!-- Question 5 -->
+      <div class="question" data-q="5">
+        <div class="q-title">Câu 5. AI trong dịch vụ khách hàng có thể làm gì?</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="q5" value="A"> A. Trả lời các câu hỏi thường gặp khi tư vấn khách hàng.</label>
+          <label class="opt"><input type="radio" name="q5" value="B"> B. Thay thế hoàn toàn nhân viên dịch vụ tư vấn khách hàng.
